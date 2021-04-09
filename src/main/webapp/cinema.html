@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+	
+	$(function(){
+		$('#select').change(function() {
+			let OfficeAPI = "http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?"
+			let datakey = {
+					  	key:"f5eef3421c602c6cb7ea224104795888",
+					  	targetDt:$('#select').val()
+			};
+			
+			console.log(datakey);
+			let table="<table border='1'>";
+			table+="<tr class='heard'><th>순위</th><th>이름</th><th>개봉일</th></tr>";
+			$.getJSON(OfficeAPI, datakey, function(data, textStatus, req) {
+				console.log(data);
+				//console.log(textStatus);
+				//console.log(req);
+				
+				$(data).each(function(index,obj){
+					//console.log(obj.boxOfficeResult.dailyBoxOfficeList);
+					for(let key in obj.boxOfficeResult.dailyBoxOfficeList){
+						
+						//console.log(obj.boxOfficeResult.dailyBoxOfficeList[key]);
+						let movie = obj.boxOfficeResult.dailyBoxOfficeList[key];
+						 table+="<tr>";
+					  		table+="<td>" + movie.rank + "</td>";
+					  		table+="<td>" + movie.movieNm + "</td>"; 
+					  		table+="<td>" + movie.openDt + "</td>";
+						  table+="</tr>";
+							
+					}
+					table+="</table>";
+					$('#table').html(table);
+			})
+		
+		});
+		
+		
+	})
+	
+	
+})	
+
+ 
+	
+</script>
+<style type="text/css">
+	table{
+		width: 100%;
+		height: 100%;
+		text-align: center;
+	}
+	.heard{
+		background-color: gold;
+	}
+	
+</style>
+</head>
+<body>
+	<select id="select">
+		<option value="20201001" selected="selected">2020/10</option>
+		<option value="20201101">2020/11</option>
+		<option value="20201201">2020/12</option>
+		<option value="20210101">2021/1</option>
+		<option value="20210201">2021/2</option>
+		<option value="20210301">2021/3</option>
+		<option value="20210401">2021/4</option>
+	</select>
+	<div id="table">
+	</div>
+</body>
+</html>
